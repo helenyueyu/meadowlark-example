@@ -1,6 +1,9 @@
 let express = require('express')
 let app = express()
 
+// Importing our own module
+let fortune = require('./lib/fortune')
+
 // Set up handlebars view engine
 let handlebars = require('express-handlebars')
   .create({defaultLayout: 'main'})
@@ -9,11 +12,13 @@ app.set('view engine', 'handlebars')
 
 app.set('port', process.env.PORT || 3000)
 
+app.use(express.static(__dirname + '/public'))
+
 app.get('/', (req, res) => {
   res.render('home')
 })
 app.get('/about', (req, res) => {
-  res.render('about')
+  res.render('about', {fortune: fortune.getFortune()})
 })
 
 app.use((req,res, next) => {
